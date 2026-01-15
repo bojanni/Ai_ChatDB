@@ -1143,12 +1143,6 @@ app.listen(3000, () => console.log('Server running on port 3000'));
 
 export async function seedExampleChatIfNeeded(): Promise<boolean> {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      return false;
-    }
-
     if (localStorage.getItem(EXAMPLE_CHAT_FLAG) === 'true') {
       return false;
     }
