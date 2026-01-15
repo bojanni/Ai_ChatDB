@@ -97,6 +97,7 @@ function App() {
               chatId={selectedChatId}
               onChatDeleted={handleChatDeleted}
               onSelectTag={setSelectedTag}
+              onSelectChat={setSelectedChatId}
             />
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-mocha-400 dark:text-sand-400">

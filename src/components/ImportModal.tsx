@@ -220,12 +220,12 @@ export function ImportModal({ isOpen, onClose, onImportComplete }: ImportModalPr
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white dark:bg-slate-800 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Import Chats</h2>
+      <div className="bg-cream-50 dark:bg-mocha-800 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between p-6 border-b border-sand-200 dark:border-sand-700">
+          <h2 className="text-2xl font-semibold text-mocha-900 dark:text-cream-50">Import Chats</h2>
           <button
             onClick={handleClose}
-            className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+            className="p-2 text-mocha-400 hover:text-mocha-600 dark:hover:text-sand-300 hover:bg-sand-100 dark:hover:bg-mocha-700 rounded-lg transition-colors"
           >
             <X size={24} />
           </button>
@@ -233,18 +233,18 @@ export function ImportModal({ isOpen, onClose, onImportComplete }: ImportModalPr
 
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-mocha-700 dark:text-sand-300 mb-2">
               Tags (optional, comma separated)
             </label>
             <input
               type="text"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-sand-300 dark:border-sand-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 bg-cream-50 dark:bg-mocha-700 text-mocha-900 dark:text-cream-50"
               placeholder="e.g., imported, research, coding"
               disabled={importing}
             />
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-mocha-500 dark:text-sand-400 mt-1">
               These tags will be applied to all imported chats
             </p>
           </div>
@@ -256,12 +256,12 @@ export function ImportModal({ isOpen, onClose, onImportComplete }: ImportModalPr
               checked={autoSummarize}
               onChange={(e) => setAutoSummarize(e.target.checked)}
               disabled={importing}
-              className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+              className="w-4 h-4 text-lime-600 rounded focus:ring-2 focus:ring-lime-500"
             />
-            <label htmlFor="auto-summarize" className="text-sm text-slate-700 dark:text-slate-300">
+            <label htmlFor="auto-summarize" className="text-sm text-mocha-700 dark:text-sand-300">
               Auto-generate AI summaries and tags for imported chats
               {!autoSummarize && !apiKey && (
-                <span className="text-amber-600 dark:text-amber-500 ml-1">(configure AI provider in settings first)</span>
+                <span className="text-coral-600 dark:text-coral-500 ml-1">(configure AI provider in settings first)</span>
               )}
             </label>
           </div>
@@ -272,19 +272,19 @@ export function ImportModal({ isOpen, onClose, onImportComplete }: ImportModalPr
             onDrop={handleDrop}
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               isDragging
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-slate-300 hover:border-slate-400'
+                ? 'border-lime-500 bg-lime-50 dark:bg-lime-900/20'
+                : 'border-sand-300 dark:border-sand-600 hover:border-sand-400 dark:hover:border-sand-500'
             } ${importing ? 'opacity-50 pointer-events-none' : ''}`}
           >
             <div className="flex flex-col items-center gap-3">
-              <div className="bg-slate-100 p-4 rounded-full">
-                <Upload size={32} className="text-slate-600" />
+              <div className="bg-sand-100 dark:bg-sand-800 p-4 rounded-full">
+                <Upload size={32} className="text-mocha-600 dark:text-sand-300" />
               </div>
               <div>
-                <p className="text-lg font-medium text-slate-900 mb-1">
+                <p className="text-lg font-medium text-mocha-900 dark:text-cream-50 mb-1">
                   Drop files here or click to browse
                 </p>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-mocha-500 dark:text-sand-400">
                   Supports .md, .pdf, and .json files
                 </p>
               </div>
@@ -299,7 +299,7 @@ export function ImportModal({ isOpen, onClose, onImportComplete }: ImportModalPr
               />
               <label
                 htmlFor="file-upload"
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors cursor-pointer"
+                className="px-4 py-2 bg-lime-500 text-cream-50 rounded-lg hover:bg-lime-600 transition-colors cursor-pointer"
               >
                 Select Files
               </label>
@@ -307,36 +307,36 @@ export function ImportModal({ isOpen, onClose, onImportComplete }: ImportModalPr
           </div>
 
           {importing && (
-            <div className="flex items-center justify-center gap-2 text-slate-600">
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+            <div className="flex items-center justify-center gap-2 text-mocha-600 dark:text-sand-300">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-lime-500"></div>
               <span>Importing files...</span>
             </div>
           )}
 
           {results.length > 0 && (
             <div className="space-y-2">
-              <h3 className="font-medium text-slate-900">Import Results</h3>
+              <h3 className="font-medium text-mocha-900 dark:text-cream-50">Import Results</h3>
               <div className="space-y-2">
                 {results.map((result, index) => (
                   <div
                     key={index}
                     className={`flex gap-3 p-3 rounded-lg border ${
                       result.status === 'success'
-                        ? 'bg-green-50 border-green-200'
-                        : 'bg-red-50 border-red-200'
+                        ? 'bg-lime-50 dark:bg-lime-900/20 border-lime-200 dark:border-lime-800'
+                        : 'bg-coral-50 dark:bg-coral-900/20 border-coral-200 dark:border-coral-800'
                     }`}
                   >
                     {result.status === 'success' ? (
-                      <CheckCircle size={20} className="text-green-600 flex-shrink-0 mt-0.5" />
+                      <CheckCircle size={20} className="text-lime-600 dark:text-lime-400 flex-shrink-0 mt-0.5" />
                     ) : (
-                      <AlertCircle size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
+                      <AlertCircle size={20} className="text-coral-600 dark:text-coral-400 flex-shrink-0 mt-0.5" />
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <FileText size={16} className="flex-shrink-0" />
                         <span className="font-medium text-sm truncate">{result.filename}</span>
                       </div>
-                      <p className="text-sm text-slate-600 mt-0.5">{result.message}</p>
+                      <p className="text-sm text-mocha-600 dark:text-sand-300 mt-0.5">{result.message}</p>
                     </div>
                   </div>
                 ))}
@@ -344,9 +344,9 @@ export function ImportModal({ isOpen, onClose, onImportComplete }: ImportModalPr
             </div>
           )}
 
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-            <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">Supported formats</h4>
-            <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+          <div className="bg-sand-50 dark:bg-sand-900/20 border border-sand-200 dark:border-sand-800 rounded-lg p-4">
+            <h4 className="font-medium text-mocha-900 dark:text-sand-100 mb-2">Supported formats</h4>
+            <ul className="text-sm text-mocha-800 dark:text-sand-200 space-y-1">
               <li>• <strong>JSON:</strong> Native exports from ChatGPT, Claude, and Gemini</li>
               <li>• <strong>Markdown:</strong> Formatted chats with labeled speakers (e.g., "User:", "Assistant:")</li>
               <li>• <strong>PDF:</strong> Text-based chat exports parsed as markdown</li>
@@ -356,10 +356,10 @@ export function ImportModal({ isOpen, onClose, onImportComplete }: ImportModalPr
           </div>
         </div>
 
-        <div className="flex gap-3 p-6 border-t border-slate-200">
+        <div className="flex gap-3 p-6 border-t border-sand-200 dark:border-sand-700">
           <button
             onClick={handleClose}
-            className="flex-1 px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition-colors"
+            className="flex-1 px-4 py-2 bg-sand-200 dark:bg-sand-700 text-mocha-700 dark:text-sand-300 rounded-lg hover:bg-sand-300 dark:hover:bg-sand-600 transition-colors"
           >
             Close
           </button>
