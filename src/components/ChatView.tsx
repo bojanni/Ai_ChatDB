@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { User, Bot, Trash2, Edit2, Save, X, Sparkles, Key } from 'lucide-react';
+import { User, Bot, Trash2, Edit2, Save, X, Sparkles, Key, Copy, Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Database } from '../lib/database.types';
+import { MessageContent } from './MessageContent';
 
 type Chat = Database['public']['Tables']['chats']['Row'];
 type Message = Database['public']['Tables']['messages']['Row'];
@@ -308,37 +309,35 @@ export function ChatView({ chatId, onChatDeleted }: ChatViewProps) {
             No messages in this chat
           </div>
         ) : (
-          <div className="divide-y divide-slate-200 dark:divide-slate-800">
+          <div>
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`px-6 py-8 ${
+                className={`group px-4 py-6 sm:px-6 sm:py-8 border-b border-slate-200 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors ${
                   message.role === 'user'
                     ? 'bg-white dark:bg-slate-900'
-                    : 'bg-slate-50 dark:bg-slate-800/50'
+                    : 'bg-slate-50/30 dark:bg-slate-800/20'
                 }`}
               >
                 <div className="max-w-3xl mx-auto">
-                  <div className="flex gap-4">
+                  <div className="flex gap-3 sm:gap-4">
                     <div
-                      className={`flex-shrink-0 w-8 h-8 rounded-sm flex items-center justify-center ${
+                      className={`flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded flex items-center justify-center ${
                         message.role === 'user'
-                          ? 'bg-blue-500 text-white'
-                          : 'bg-emerald-500 text-white'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-emerald-600 dark:bg-emerald-500 text-white'
                       }`}
                     >
-                      {message.role === 'user' ? <User size={18} /> : <Bot size={18} />}
+                      {message.role === 'user' ? <User size={16} /> : <Bot size={16} />}
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 pt-0.5">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="font-semibold text-slate-900 dark:text-white">
+                        <span className="font-semibold text-slate-900 dark:text-white text-sm">
                           {message.role === 'user' ? 'You' : chat.ai_source}
                         </span>
                       </div>
-                      <div className="prose prose-slate dark:prose-invert max-w-none">
-                        <p className="whitespace-pre-wrap break-words text-slate-900 dark:text-slate-100 leading-relaxed">
-                          {message.content}
-                        </p>
+                      <div className="text-[15px] leading-7 text-slate-800 dark:text-slate-200">
+                        <MessageContent content={message.content} role={message.role} />
                       </div>
                     </div>
                   </div>
