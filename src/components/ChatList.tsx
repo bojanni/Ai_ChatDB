@@ -55,20 +55,20 @@ export function ChatList({ selectedChatId, onSelectChat, selectedTag, onSelectTa
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-slate-400 dark:text-slate-500">Loading chats...</div>
+        <div className="text-mocha-400 dark:text-sand-400">Loading chats...</div>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-slate-200 dark:border-slate-700">
+      <div className="p-4 border-b border-sand-200 dark:border-mocha-700">
         {selectedTag && (
-          <div className="mb-3 flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+          <div className="mb-3 flex items-center gap-2 text-sm text-mocha-700 dark:text-sand-200">
             <span>Filtered by:</span>
             <button
               onClick={() => onSelectTag(null)}
-              className="inline-flex items-center gap-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+              className="inline-flex items-center gap-1 px-2 py-1 bg-lime-400 text-mocha-900 rounded hover:bg-lime-500 transition-colors font-medium"
             >
               <Tag size={12} />
               {selectedTag}
@@ -81,7 +81,7 @@ export function ChatList({ selectedChatId, onSelectChat, selectedTag, onSelectTa
           placeholder="Search chats..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
+          className="w-full px-3 py-2 border border-sand-300 dark:border-mocha-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 bg-white dark:bg-mocha-700 text-mocha-900 dark:text-cream-50 placeholder-mocha-400 dark:placeholder-sand-400"
         />
         {allTags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-3">
@@ -89,8 +89,8 @@ export function ChatList({ selectedChatId, onSelectChat, selectedTag, onSelectTa
               onClick={() => onSelectTag(null)}
               className={`px-2 py-1 text-xs rounded-full transition-colors ${
                 selectedTag === null
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                  ? 'bg-lime-400 text-mocha-900 font-medium'
+                  : 'bg-sand-200 dark:bg-mocha-700 text-mocha-700 dark:text-sand-200 hover:bg-sand-300 dark:hover:bg-mocha-600'
               }`}
             >
               All
@@ -101,8 +101,8 @@ export function ChatList({ selectedChatId, onSelectChat, selectedTag, onSelectTa
                 onClick={() => onSelectTag(tag)}
                 className={`px-2 py-1 text-xs rounded-full transition-colors ${
                   selectedTag === tag
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                    ? 'bg-lime-400 text-mocha-900 font-medium'
+                    : 'bg-sand-200 dark:bg-mocha-700 text-mocha-700 dark:text-sand-200 hover:bg-sand-300 dark:hover:bg-mocha-600'
                 }`}
               >
                 {tag}
@@ -114,25 +114,25 @@ export function ChatList({ selectedChatId, onSelectChat, selectedTag, onSelectTa
 
       <div className="flex-1 overflow-y-auto">
         {filteredChats.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-slate-400 dark:text-slate-500 p-6">
+          <div className="flex flex-col items-center justify-center h-full text-mocha-400 dark:text-sand-400 p-6">
             <MessageSquare size={48} className="mb-2 opacity-50" />
             <p className="text-center">No chats found</p>
           </div>
         ) : (
-          <div className="divide-y divide-slate-200 dark:divide-slate-700">
+          <div className="divide-y divide-sand-200 dark:divide-mocha-700">
             {filteredChats.map((chat) => (
               <button
                 key={chat.id}
                 onClick={() => onSelectChat(chat.id)}
-                className={`w-full text-left p-4 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors ${
-                  selectedChatId === chat.id ? 'bg-blue-50 dark:bg-slate-700 border-l-4 border-blue-500' : ''
+                className={`w-full text-left p-4 hover:bg-cream-100 dark:hover:bg-mocha-700 transition-colors ${
+                  selectedChatId === chat.id ? 'bg-lime-50 dark:bg-mocha-700 border-l-4 border-lime-400' : ''
                 }`}
               >
                 <div className="flex items-start justify-between mb-1">
-                  <h3 className="font-medium text-slate-900 dark:text-white line-clamp-1">{chat.title}</h3>
+                  <h3 className="font-medium text-mocha-900 dark:text-cream-50 line-clamp-1">{chat.title}</h3>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mb-2">
-                  <span className="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded">{chat.ai_source}</span>
+                <div className="flex items-center gap-3 text-xs text-mocha-600 dark:text-sand-300 mb-2">
+                  <span className="bg-sand-200 dark:bg-mocha-700 px-2 py-0.5 rounded">{chat.ai_source}</span>
                   <span className="flex items-center gap-1">
                     <Calendar size={12} />
                     {new Date(chat.created_at).toLocaleDateString()}
@@ -147,7 +147,7 @@ export function ChatList({ selectedChatId, onSelectChat, selectedTag, onSelectTa
                           e.stopPropagation();
                           onSelectTag(tag);
                         }}
-                        className="inline-flex items-center gap-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                        className="inline-flex items-center gap-1 text-xs bg-coral-100 dark:bg-coral-900/30 text-coral-700 dark:text-coral-300 px-2 py-0.5 rounded hover:bg-coral-200 dark:hover:bg-coral-900/50 transition-colors"
                       >
                         <Tag size={10} />
                         {tag}

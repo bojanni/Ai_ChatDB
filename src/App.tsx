@@ -42,36 +42,36 @@ function App() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-slate-50 dark:bg-slate-900">
-      <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+    <div className="h-screen flex flex-col bg-cream-50 dark:bg-mocha-900">
+      <header className="bg-sand-50 dark:bg-mocha-800 border-b border-sand-200 dark:border-mocha-700 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-2 rounded-lg">
+            <div className="bg-gradient-to-br from-lime-400 to-lime-500 text-mocha-900 p-2 rounded-lg">
               <Brain size={28} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">AI Knowledge Base</h1>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Your personal collection of AI conversations</p>
+              <h1 className="text-2xl font-bold text-mocha-900 dark:text-cream-50">AI Knowledge Base</h1>
+              <p className="text-sm text-mocha-600 dark:text-sand-300">Your personal collection of AI conversations</p>
             </div>
           </div>
           <div className="flex gap-3">
             <button
               onClick={() => setIsSettingsModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-sand-200 dark:bg-mocha-700 text-mocha-800 dark:text-sand-200 rounded-lg hover:bg-sand-300 dark:hover:bg-mocha-600 transition-colors shadow-sm"
             >
               <Settings size={20} />
               Settings
             </button>
             <button
               onClick={() => setIsImportModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-700 dark:bg-slate-600 text-white rounded-lg hover:bg-slate-800 dark:hover:bg-slate-500 transition-colors shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-coral-500 text-white rounded-lg hover:bg-coral-600 transition-colors shadow-sm"
             >
               <Upload size={20} />
               Import
             </button>
             <button
               onClick={() => setIsNewChatModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-lime-400 text-mocha-900 rounded-lg hover:bg-lime-500 transition-colors shadow-sm font-medium"
             >
               <Plus size={20} />
               New Chat
@@ -81,7 +81,7 @@ function App() {
       </header>
 
       <div className="flex-1 flex overflow-hidden">
-        <aside className="w-80 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col">
+        <aside className="w-80 bg-sand-50 dark:bg-mocha-800 border-r border-sand-200 dark:border-mocha-700 flex flex-col">
           <ChatList
             selectedChatId={selectedChatId}
             onSelectChat={setSelectedChatId}
@@ -99,7 +99,7 @@ function App() {
               onSelectTag={setSelectedTag}
             />
           ) : (
-            <div className="h-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
+            <div className="h-full flex flex-col items-center justify-center text-mocha-400 dark:text-sand-400">
               <Brain size={64} className="opacity-50 mb-4" />
               <p className="text-lg">Select a chat to view its content</p>
               <p className="text-sm mt-2">or create a new one to get started</p>

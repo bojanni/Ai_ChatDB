@@ -183,7 +183,7 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-slate-400 dark:text-slate-500">Loading chat...</div>
+        <div className="text-mocha-400 dark:text-sand-400">Loading chat...</div>
       </div>
     );
   }
@@ -191,34 +191,34 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
   if (!chat) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-slate-400 dark:text-slate-500">Chat not found</div>
+        <div className="text-mocha-400 dark:text-sand-400">Chat not found</div>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col h-full">
-      <div className="border-b border-slate-200 dark:border-slate-700 p-4 bg-white dark:bg-slate-800">
+      <div className="border-b border-sand-200 dark:border-mocha-700 p-4 bg-sand-50 dark:bg-mocha-800">
         {editingChatId ? (
           <div className="space-y-3">
             <input
               type="text"
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+              className="w-full px-3 py-2 border border-sand-300 dark:border-mocha-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 bg-white dark:bg-mocha-700 text-mocha-900 dark:text-cream-50"
               placeholder="Chat title"
             />
             <input
               type="text"
               value={editTags}
               onChange={(e) => setEditTags(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+              className="w-full px-3 py-2 border border-sand-300 dark:border-mocha-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 bg-white dark:bg-mocha-700 text-mocha-900 dark:text-cream-50"
               placeholder="Tags (comma separated)"
             />
             <div className="flex gap-2">
               <button
                 onClick={handleSaveEdit}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-lime-400 text-mocha-900 rounded-lg hover:bg-lime-500 transition-colors font-medium"
               >
                 <Save size={16} />
                 Save
@@ -229,7 +229,7 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
                   setEditTitle(chat.title);
                   setEditTags(chat.tags.join(', '));
                 }}
-                className="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-sand-200 dark:bg-mocha-700 text-mocha-800 dark:text-sand-200 rounded-lg hover:bg-sand-300 dark:hover:bg-mocha-600 transition-colors"
               >
                 <X size={16} />
                 Cancel
@@ -240,15 +240,15 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
           <>
             <div className="flex items-start justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{chat.title}</h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                <h2 className="text-xl font-semibold text-mocha-900 dark:text-cream-50">{chat.title}</h2>
+                <p className="text-sm text-mocha-600 dark:text-sand-300 mt-1">
                   {chat.ai_source} • {new Date(chat.created_at).toLocaleDateString()}
                 </p>
                 {chat.summary && (
-                  <div className="mt-2 p-3 bg-gradient-to-r from-violet-50 to-fuchsia-50 dark:from-violet-900/20 dark:to-fuchsia-900/20 border border-violet-200 dark:border-violet-800 rounded-lg">
+                  <div className="mt-2 p-3 bg-gradient-to-r from-cream-200 to-sand-200 dark:from-mocha-700 dark:to-mocha-600 border border-sand-300 dark:border-mocha-500 rounded-lg">
                     <div className="flex items-start gap-2">
-                      <Sparkles size={14} className="text-violet-600 dark:text-violet-400 mt-0.5 flex-shrink-0" />
-                      <p className="text-sm text-slate-700 dark:text-slate-300">{chat.summary}</p>
+                      <Sparkles size={14} className="text-lime-600 dark:text-lime-400 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm text-mocha-800 dark:text-sand-100">{chat.summary}</p>
                     </div>
                   </div>
                 )}
@@ -258,7 +258,7 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
                       <button
                         key={tag}
                         onClick={() => onSelectTag(tag)}
-                        className="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-2 py-1 rounded hover:bg-blue-200 dark:hover:bg-blue-900/60 transition-colors cursor-pointer"
+                        className="text-xs bg-coral-100 dark:bg-coral-900/40 text-coral-700 dark:text-coral-300 px-2 py-1 rounded hover:bg-coral-200 dark:hover:bg-coral-900/60 transition-colors cursor-pointer"
                         title={`Show all chats with tag: ${tag}`}
                       >
                         {tag}
@@ -271,7 +271,7 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
                 <button
                   onClick={handleGenerateSummary}
                   disabled={summarizing}
-                  className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg hover:from-violet-600 hover:to-fuchsia-600 transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-lime-400 to-lime-500 text-mocha-900 rounded-lg hover:from-lime-500 hover:to-lime-600 transition-colors disabled:opacity-50 font-medium"
                   title="Generate AI summary and tags"
                 >
                   <Sparkles size={16} />
@@ -280,7 +280,7 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
                 {!apiKey && (
                   <button
                     onClick={() => setShowApiKeyModal(true)}
-                    className="p-2 text-amber-600 dark:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg transition-colors"
+                    className="p-2 text-coral-600 dark:text-coral-400 hover:bg-coral-50 dark:hover:bg-coral-900/20 rounded-lg transition-colors"
                     title="Set OpenAI API Key"
                   >
                     <Key size={18} />
@@ -288,14 +288,14 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
                 )}
                 <button
                   onClick={() => setEditingChatId(true)}
-                  className="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                  className="p-2 text-mocha-600 dark:text-sand-300 hover:bg-sand-100 dark:hover:bg-mocha-700 rounded-lg transition-colors"
                   title="Edit chat"
                 >
                   <Edit2 size={18} />
                 </button>
                 <button
                   onClick={handleDeleteChat}
-                  className="p-2 text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                  className="p-2 text-coral-600 dark:text-coral-400 hover:bg-coral-50 dark:hover:bg-coral-900/20 rounded-lg transition-colors"
                   title="Delete chat"
                 >
                   <Trash2 size={18} />
@@ -306,9 +306,9 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto bg-white dark:bg-slate-900">
+      <div className="flex-1 overflow-y-auto bg-cream-50 dark:bg-mocha-900">
         {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-slate-400 dark:text-slate-500">
+          <div className="flex items-center justify-center h-full text-mocha-400 dark:text-sand-400">
             No messages in this chat
           </div>
         ) : (
@@ -316,10 +316,10 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`group px-4 py-6 sm:px-6 sm:py-8 border-b border-slate-200 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors ${
+                className={`group px-4 py-6 sm:px-6 sm:py-8 border-b border-sand-200 dark:border-mocha-800 hover:bg-sand-100/50 dark:hover:bg-mocha-800/30 transition-colors ${
                   message.role === 'user'
-                    ? 'bg-white dark:bg-slate-900'
-                    : 'bg-slate-50/30 dark:bg-slate-800/20'
+                    ? 'bg-cream-50 dark:bg-mocha-900'
+                    : 'bg-sand-100/30 dark:bg-mocha-800/20'
                 }`}
               >
                 <div className="max-w-3xl mx-auto">
@@ -327,19 +327,19 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
                     <div
                       className={`flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded flex items-center justify-center ${
                         message.role === 'user'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-emerald-600 dark:bg-emerald-500 text-white'
+                          ? 'bg-coral-500 text-white'
+                          : 'bg-lime-500 dark:bg-lime-600 text-mocha-900'
                       }`}
                     >
                       {message.role === 'user' ? <User size={16} /> : <Bot size={16} />}
                     </div>
                     <div className="flex-1 min-w-0 pt-0.5">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="font-semibold text-slate-900 dark:text-white text-sm">
+                        <span className="font-semibold text-mocha-900 dark:text-cream-50 text-sm">
                           {message.role === 'user' ? 'You' : chat.ai_source}
                         </span>
                       </div>
-                      <div className="text-[15px] leading-7 text-slate-800 dark:text-slate-200">
+                      <div className="text-[15px] leading-7 text-mocha-800 dark:text-sand-100">
                         <MessageContent content={message.content} role={message.role} />
                       </div>
                     </div>
@@ -353,20 +353,20 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
 
       {showApiKeyModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-md w-full p-6">
+          <div className="bg-cream-50 dark:bg-mocha-800 rounded-xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-slate-900">OpenAI API Key</h3>
+              <h3 className="text-lg font-semibold text-mocha-900 dark:text-cream-50">OpenAI API Key</h3>
               <button
                 onClick={() => {
                   setShowApiKeyModal(false);
                   setTempApiKey('');
                 }}
-                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                className="p-2 text-mocha-400 dark:text-sand-400 hover:text-mocha-600 dark:hover:text-sand-200 hover:bg-sand-100 dark:hover:bg-mocha-700 rounded-lg transition-colors"
               >
                 <X size={20} />
               </button>
             </div>
-            <p className="text-sm text-slate-600 mb-4">
+            <p className="text-sm text-mocha-700 dark:text-sand-200 mb-4">
               Enter your OpenAI API key to enable AI-powered summarization and tagging. Your key is stored locally in your browser.
             </p>
             <input
@@ -374,13 +374,13 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
               value={tempApiKey}
               onChange={(e) => setTempApiKey(e.target.value)}
               placeholder="sk-..."
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              className="w-full px-3 py-2 border border-sand-300 dark:border-mocha-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 bg-white dark:bg-mocha-700 text-mocha-900 dark:text-cream-50 mb-4"
             />
             <div className="flex gap-2">
               <button
                 onClick={handleSaveApiKey}
                 disabled={!tempApiKey}
-                className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-lime-400 text-mocha-900 rounded-lg hover:bg-lime-500 transition-colors disabled:opacity-50 font-medium"
               >
                 Save
               </button>
@@ -389,18 +389,18 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) 
                   setShowApiKeyModal(false);
                   setTempApiKey('');
                 }}
-                className="flex-1 px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition-colors"
+                className="flex-1 px-4 py-2 bg-sand-200 dark:bg-mocha-700 text-mocha-800 dark:text-sand-200 rounded-lg hover:bg-sand-300 dark:hover:bg-mocha-600 transition-colors"
               >
                 Cancel
               </button>
             </div>
-            <p className="text-xs text-slate-500 mt-4">
+            <p className="text-xs text-mocha-600 dark:text-sand-300 mt-4">
               Get your API key from{' '}
               <a
                 href="https://platform.openai.com/api-keys"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
+                className="text-lime-600 dark:text-lime-400 hover:underline"
               >
                 OpenAI Platform
               </a>
