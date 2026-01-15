@@ -302,44 +302,46 @@ export function ChatView({ chatId, onChatDeleted }: ChatViewProps) {
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6 bg-slate-50 dark:bg-slate-900">
+      <div className="flex-1 overflow-y-auto bg-white dark:bg-slate-900">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-slate-400 dark:text-slate-500">
             No messages in this chat
           </div>
         ) : (
-          <div className="space-y-4 max-w-4xl mx-auto">
+          <div className="divide-y divide-slate-200 dark:divide-slate-800">
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex gap-3 ${
-                  message.role === 'user' ? 'flex-row-reverse' : ''
+                className={`px-6 py-8 ${
+                  message.role === 'user'
+                    ? 'bg-white dark:bg-slate-900'
+                    : 'bg-slate-50 dark:bg-slate-800/50'
                 }`}
               >
-                <div
-                  className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                    message.role === 'user'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-slate-300 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
-                  }`}
-                >
-                  {message.role === 'user' ? <User size={16} /> : <Bot size={16} />}
-                </div>
-                <div
-                  className={`flex-1 px-4 py-3 rounded-lg ${
-                    message.role === 'user'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700'
-                  }`}
-                >
-                  <p className="whitespace-pre-wrap break-words">{message.content}</p>
-                  <p
-                    className={`text-xs mt-2 ${
-                      message.role === 'user' ? 'text-blue-100' : 'text-slate-400 dark:text-slate-500'
-                    }`}
-                  >
-                    {new Date(message.created_at).toLocaleString()}
-                  </p>
+                <div className="max-w-3xl mx-auto">
+                  <div className="flex gap-4">
+                    <div
+                      className={`flex-shrink-0 w-8 h-8 rounded-sm flex items-center justify-center ${
+                        message.role === 'user'
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-emerald-500 text-white'
+                      }`}
+                    >
+                      {message.role === 'user' ? <User size={18} /> : <Bot size={18} />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="font-semibold text-slate-900 dark:text-white">
+                          {message.role === 'user' ? 'You' : chat.ai_source}
+                        </span>
+                      </div>
+                      <div className="prose prose-slate dark:prose-invert max-w-none">
+                        <p className="whitespace-pre-wrap break-words text-slate-900 dark:text-slate-100 leading-relaxed">
+                          {message.content}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
