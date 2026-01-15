@@ -428,6 +428,14 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag, onSelectChat }: C
                         {new Date(relatedChat.created_at).toLocaleDateString()}
                       </span>
                     </div>
+                    {relatedChat.summary && (
+                      <div className="mb-2 p-2 bg-gradient-to-r from-cream-100 to-sand-100 dark:from-mocha-600 dark:to-mocha-700 border border-sand-200 dark:border-mocha-500 rounded">
+                        <div className="flex items-start gap-1.5">
+                          <Sparkles size={10} className="text-lime-600 dark:text-lime-400 mt-0.5 flex-shrink-0" />
+                          <p className="text-xs text-mocha-700 dark:text-sand-200 line-clamp-2">{relatedChat.summary}</p>
+                        </div>
+                      </div>
+                    )}
                     {relatedChat.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1">
                         {relatedChat.tags.slice(0, 3).map((tag) => (

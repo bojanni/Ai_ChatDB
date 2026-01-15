@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MessageSquare, Tag, Calendar, X } from 'lucide-react';
+import { MessageSquare, Tag, Calendar, X, Sparkles } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Database } from '../lib/database.types';
 
@@ -138,6 +138,14 @@ export function ChatList({ selectedChatId, onSelectChat, selectedTag, onSelectTa
                     {new Date(chat.created_at).toLocaleDateString()}
                   </span>
                 </div>
+                {chat.summary && (
+                  <div className="mb-2 p-2 bg-gradient-to-r from-cream-100 to-sand-100 dark:from-mocha-700 dark:to-mocha-600 border border-sand-200 dark:border-mocha-600 rounded text-xs">
+                    <div className="flex items-start gap-1.5">
+                      <Sparkles size={11} className="text-lime-600 dark:text-lime-400 mt-0.5 flex-shrink-0" />
+                      <p className="text-mocha-700 dark:text-sand-200 line-clamp-2">{chat.summary}</p>
+                    </div>
+                  </div>
+                )}
                 {chat.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1">
                     {chat.tags.map((tag) => (
