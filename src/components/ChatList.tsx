@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MessageSquare, Tag, Calendar } from 'lucide-react';
+import { MessageSquare, Tag, Calendar, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Database } from '../lib/database.types';
 
@@ -8,14 +8,15 @@ type Chat = Database['public']['Tables']['chats']['Row'];
 interface ChatListProps {
   selectedChatId: string | null;
   onSelectChat: (chatId: string) => void;
+  selectedTag: string | null;
+  onSelectTag: (tag: string | null) => void;
   refreshTrigger: number;
 }
 
-export function ChatList({ selectedChatId, onSelectChat, refreshTrigger }: ChatListProps) {
+export function ChatList({ selectedChatId, onSelectChat, selectedTag, onSelectTag, refreshTrigger }: ChatListProps) {
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   useEffect(() => {
     fetchChats();
@@ -62,6 +63,19 @@ export function ChatList({ selectedChatId, onSelectChat, refreshTrigger }: ChatL
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 border-b border-slate-200 dark:border-slate-700">
+        {selectedTag && (
+          <div className="mb-3 flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+            <span>Filtered by:</span>
+            <button
+              onClick={() => onSelectTag(null)}
+              className="inline-flex items-center gap-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            >
+              <Tag size={12} />
+              {selectedTag}
+              <X size={14} />
+            </button>
+          </div>
+        )}
         <input
           type="text"
           placeholder="Search chats..."
@@ -72,7 +86,7 @@ export function ChatList({ selectedChatId, onSelectChat, refreshTrigger }: ChatL
         {allTags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-3">
             <button
-              onClick={() => setSelectedTag(null)}
+              onClick={() => onSelectTag(null)}
               className={`px-2 py-1 text-xs rounded-full transition-colors ${
                 selectedTag === null
                   ? 'bg-blue-500 text-white'
@@ -84,7 +98,7 @@ export function ChatList({ selectedChatId, onSelectChat, refreshTrigger }: ChatL
             {allTags.map((tag) => (
               <button
                 key={tag}
-                onClick={() => setSelectedTag(tag)}
+                onClick={() => onSelectTag(tag)}
                 className={`px-2 py-1 text-xs rounded-full transition-colors ${
                   selectedTag === tag
                     ? 'bg-blue-500 text-white'
@@ -127,13 +141,17 @@ export function ChatList({ selectedChatId, onSelectChat, refreshTrigger }: ChatL
                 {chat.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1">
                     {chat.tags.map((tag) => (
-                      <span
+                      <button
                         key={tag}
-                        className="inline-flex items-center gap-1 text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSelectTag(tag);
+                        }}
+                        className="inline-flex items-center gap-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
                       >
                         <Tag size={10} />
                         {tag}
-                      </span>
+                      </button>
                     ))}
                   </div>
                 )}

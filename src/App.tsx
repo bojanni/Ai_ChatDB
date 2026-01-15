@@ -9,6 +9,7 @@ import { seedExampleChatIfNeeded } from './utils/seedExampleChat';
 
 function App() {
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -84,13 +85,19 @@ function App() {
           <ChatList
             selectedChatId={selectedChatId}
             onSelectChat={setSelectedChatId}
+            selectedTag={selectedTag}
+            onSelectTag={setSelectedTag}
             refreshTrigger={refreshTrigger}
           />
         </aside>
 
         <main className="flex-1 overflow-hidden">
           {selectedChatId ? (
-            <ChatView chatId={selectedChatId} onChatDeleted={handleChatDeleted} />
+            <ChatView
+              chatId={selectedChatId}
+              onChatDeleted={handleChatDeleted}
+              onSelectTag={setSelectedTag}
+            />
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
               <Brain size={64} className="opacity-50 mb-4" />

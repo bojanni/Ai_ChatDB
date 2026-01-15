@@ -10,9 +10,10 @@ type Message = Database['public']['Tables']['messages']['Row'];
 interface ChatViewProps {
   chatId: string;
   onChatDeleted: () => void;
+  onSelectTag: (tag: string) => void;
 }
 
-export function ChatView({ chatId, onChatDeleted }: ChatViewProps) {
+export function ChatView({ chatId, onChatDeleted, onSelectTag }: ChatViewProps) {
   const [chat, setChat] = useState<Chat | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
@@ -254,12 +255,14 @@ export function ChatView({ chatId, onChatDeleted }: ChatViewProps) {
                 {chat.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-2">
                     {chat.tags.map((tag) => (
-                      <span
+                      <button
                         key={tag}
-                        className="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-2 py-1 rounded"
+                        onClick={() => onSelectTag(tag)}
+                        className="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-2 py-1 rounded hover:bg-blue-200 dark:hover:bg-blue-900/60 transition-colors cursor-pointer"
+                        title={`Show all chats with tag: ${tag}`}
                       >
                         {tag}
-                      </span>
+                      </button>
                     ))}
                   </div>
                 )}
