@@ -158,10 +158,146 @@ export function parsePDF(content: string): ParsedChat {
   return parseMarkdown(content);
 }
 
+function parseChatGPTExport(data: any): ParsedChat {
+  const messages: ParsedMessage[] = [];
+  const title = data.title || 'ChatGPT Conversation';
+
+  if (data.mapping) {
+    const messageMap = new Map();
+    const childrenMap = new Map();
+
+    for (const [id, node] of Object.entries(data.mapping as any)) {
+      if (node.message && node.message.content && node.message.content.parts) {
+        messageMap.set(id, node);
+        if (node.parent) {
+          if (!childrenMap.has(node.parent)) {
+            childrenMap.set(node.parent, []);
+          }
+          childrenMap.get(node.parent).push(id);
+        }
+      }
+    }
+
+    const rootIds = Array.from(messageMap.keys()).filter(id => {
+      const node = messageMap.get(id);
+      return !node.parent || !messageMap.has(node.parent);
+    });
+
+    function traverseMessages(nodeId: string) {
+      const node = messageMap.get(nodeId);
+      if (!node || !node.message) return;
+
+      const role = node.message.author?.role;
+      const parts = node.message.content?.parts || [];
+      const content = parts.join('\n').trim();
+
+      if (content && (role === 'user' || role === 'assistant')) {
+        messages.push({
+          role: role as 'user' | 'assistant',
+          content
+        });
+      }
+
+      const children = childrenMap.get(nodeId) || [];
+      for (const childId of children) {
+        traverseMessages(childId);
+      }
+    }
+
+    for (const rootId of rootIds) {
+      traverseMessages(rootId);
+    }
+  }
+
+  return {
+    title,
+    aiSource: 'ChatGPT',
+    messages
+  };
+}
+
+function parseClaudeExport(data: any): ParsedChat {
+  const messages: ParsedMessage[] = [];
+  const title = data.name || 'Claude Conversation';
+
+  if (data.chat_messages && Array.isArray(data.chat_messages)) {
+    for (const msg of data.chat_messages) {
+      const role = msg.sender === 'human' ? 'user' : 'assistant';
+      const content = msg.text?.trim();
+
+      if (content) {
+        messages.push({
+          role,
+          content
+        });
+      }
+    }
+  }
+
+  return {
+    title,
+    aiSource: 'Claude',
+    messages
+  };
+}
+
+function parseGeminiExport(data: any): ParsedChat {
+  const messages: ParsedMessage[] = [];
+  const title = data.title || 'Gemini Conversation';
+
+  if (data.history && Array.isArray(data.history)) {
+    for (const msg of data.history) {
+      const role = msg.role === 'model' ? 'assistant' : 'user';
+      const parts = msg.parts || [];
+      const content = parts.map((p: any) => p.text || '').join('\n').trim();
+
+      if (content) {
+        messages.push({
+          role,
+          content
+        });
+      }
+    }
+  }
+
+  return {
+    title,
+    aiSource: 'Gemini',
+    messages
+  };
+}
+
+function parseJSON(content: string): ParsedChat {
+  try {
+    const data = JSON.parse(content);
+
+    if (data.mapping && data.title !== undefined) {
+      return parseChatGPTExport(data);
+    }
+
+    if (data.chat_messages && Array.isArray(data.chat_messages)) {
+      return parseClaudeExport(data);
+    }
+
+    if (data.history && Array.isArray(data.history)) {
+      return parseGeminiExport(data);
+    }
+
+    throw new Error('Unrecognized JSON format. Expected ChatGPT, Claude, or Gemini export format.');
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      throw new Error('Invalid JSON file');
+    }
+    throw error;
+  }
+}
+
 export async function parseFile(file: File): Promise<ParsedChat> {
   const content = await file.text();
 
-  if (file.name.endsWith('.md') || file.name.endsWith('.markdown')) {
+  if (file.name.endsWith('.json')) {
+    return parseJSON(content);
+  } else if (file.name.endsWith('.md') || file.name.endsWith('.markdown')) {
     return parseMarkdown(content);
   } else if (file.name.endsWith('.pdf')) {
     return parsePDF(content);

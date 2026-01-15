@@ -68,11 +68,11 @@ export function ImportModal({ isOpen, onClose, onImportComplete }: ImportModalPr
       const file = files[i];
 
       try {
-        if (!file.name.match(/\.(md|markdown|pdf)$/i)) {
+        if (!file.name.match(/\.(md|markdown|pdf|json)$/i)) {
           importResults.push({
             filename: file.name,
             status: 'error',
-            message: 'Unsupported file type. Only .md and .pdf files are supported.'
+            message: 'Unsupported file type. Only .md, .pdf, and .json files are supported.'
           });
           continue;
         }
@@ -285,13 +285,13 @@ export function ImportModal({ isOpen, onClose, onImportComplete }: ImportModalPr
                   Drop files here or click to browse
                 </p>
                 <p className="text-sm text-slate-500">
-                  Supports .md and .pdf files
+                  Supports .md, .pdf, and .json files
                 </p>
               </div>
               <input
                 type="file"
                 multiple
-                accept=".md,.markdown,.pdf"
+                accept=".md,.markdown,.pdf,.json"
                 onChange={handleFileSelect}
                 className="hidden"
                 id="file-upload"
@@ -344,14 +344,14 @@ export function ImportModal({ isOpen, onClose, onImportComplete }: ImportModalPr
             </div>
           )}
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="font-medium text-blue-900 mb-2">How it works</h4>
-            <ul className="text-sm text-blue-800 space-y-1">
-              <li>• Automatically detects AI vs user messages based on labels and patterns</li>
-              <li>• Extracts chat title from headers or first lines</li>
-              <li>• Identifies AI source (ChatGPT, Claude, Gemini, etc.)</li>
-              <li>• Supports markdown with labeled speakers (e.g., "User:", "Assistant:")</li>
-              <li>• PDF text is parsed the same way as markdown</li>
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">Supported formats</h4>
+            <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+              <li>• <strong>JSON:</strong> Native exports from ChatGPT, Claude, and Gemini</li>
+              <li>• <strong>Markdown:</strong> Formatted chats with labeled speakers (e.g., "User:", "Assistant:")</li>
+              <li>• <strong>PDF:</strong> Text-based chat exports parsed as markdown</li>
+              <li>• Automatically detects AI source and extracts chat metadata</li>
+              <li>• Preserves conversation structure and message roles</li>
             </ul>
           </div>
         </div>
