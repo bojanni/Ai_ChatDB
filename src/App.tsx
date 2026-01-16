@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Plus, Brain, Upload, Settings } from 'lucide-react';
+import { Plus, Brain, Upload, Settings, BarChart3 } from 'lucide-react';
 import { ChatList } from './components/ChatList';
 import { ChatView } from './components/ChatView';
 import { NewChatModal } from './components/NewChatModal';
 import { ImportModal } from './components/ImportModal';
 import { SettingsModal } from './components/SettingsModal';
+import AnalyticsDashboard from './components/AnalyticsDashboard';
 import { seedExampleChatIfNeeded } from './utils/seedExampleChat';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
@@ -55,6 +57,13 @@ function App() {
             </div>
           </div>
           <div className="flex gap-3">
+            <button
+              onClick={() => setIsAnalyticsOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-lime-400 to-lime-500 text-mocha-900 rounded-lg hover:from-lime-500 hover:to-lime-600 transition-all shadow-sm font-medium"
+            >
+              <BarChart3 size={20} />
+              Analytics
+            </button>
             <button
               onClick={() => setIsSettingsModalOpen(true)}
               className="flex items-center gap-2 px-4 py-2 bg-sand-200 dark:bg-mocha-700 text-mocha-800 dark:text-sand-200 rounded-lg hover:bg-sand-300 dark:hover:bg-mocha-600 transition-colors shadow-sm"
@@ -125,6 +134,10 @@ function App() {
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}
       />
+
+      {isAnalyticsOpen && (
+        <AnalyticsDashboard onClose={() => setIsAnalyticsOpen(false)} />
+      )}
     </div>
   );
 }
