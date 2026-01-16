@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Plus, Brain, Upload, Settings, BarChart3 } from 'lucide-react';
+import { Plus, Brain, Upload, Settings, BarChart3, Network } from 'lucide-react';
 import { ChatList } from './components/ChatList';
 import { ChatView } from './components/ChatView';
 import { NewChatModal } from './components/NewChatModal';
 import { ImportModal } from './components/ImportModal';
 import { SettingsModal } from './components/SettingsModal';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
+import NetworkVisualization from './components/NetworkVisualization';
 import { seedExampleChatIfNeeded } from './utils/seedExampleChat';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
+  const [isNetworkViewOpen, setIsNetworkViewOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
@@ -63,6 +65,13 @@ function App() {
             >
               <BarChart3 size={20} />
               Analytics
+            </button>
+            <button
+              onClick={() => setIsNetworkViewOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-coral-400 to-coral-500 text-white rounded-lg hover:from-coral-500 hover:to-coral-600 transition-all shadow-sm font-medium"
+            >
+              <Network size={20} />
+              Network
             </button>
             <button
               onClick={() => setIsSettingsModalOpen(true)}
@@ -136,7 +145,24 @@ function App() {
       />
 
       {isAnalyticsOpen && (
-        <AnalyticsDashboard onClose={() => setIsAnalyticsOpen(false)} />
+        <AnalyticsDashboard
+          onClose={() => setIsAnalyticsOpen(false)}
+          onSelectChat={(chatId) => {
+            setIsAnalyticsOpen(false);
+            setSelectedChatId(chatId);
+          }}
+        />
+      )}
+
+      {isNetworkViewOpen && (
+        <NetworkVisualization
+          onClose={() => setIsNetworkViewOpen(false)}
+          onSelectChat={(chatId) => {
+            setIsNetworkViewOpen(false);
+            setSelectedChatId(chatId);
+          }}
+          selectedChatId={selectedChatId}
+        />
       )}
     </div>
   );

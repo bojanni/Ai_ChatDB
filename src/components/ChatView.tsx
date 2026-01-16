@@ -3,6 +3,7 @@ import { User, Bot, Trash2, Edit2, Save, X, Sparkles, Key, Copy, Check, MessageS
 import { supabase } from '../lib/supabase';
 import type { Database } from '../lib/database.types';
 import { MessageContent } from './MessageContent';
+import RelatedChats from './RelatedChats';
 
 type Chat = Database['public']['Tables']['chats']['Row'];
 type Message = Database['public']['Tables']['messages']['Row'];
@@ -25,11 +26,9 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag, onSelectChat }: C
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
   const [apiKey, setApiKey] = useState('');
   const [tempApiKey, setTempApiKey] = useState('');
-  const [relatedChats, setRelatedChats] = useState<Chat[]>([]);
 
   useEffect(() => {
     fetchChatAndMessages();
-    fetchRelatedChats();
   }, [chatId]);
 
   useEffect(() => {
@@ -39,54 +38,6 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag, onSelectChat }: C
     }
   }, []);
 
-  async function fetchRelatedChats() {
-    try {
-      // First get the current chat to access its tags
-      const { data: currentChat, error: chatError } = await supabase
-        .from('chats')
-        .select('tags')
-        .eq('id', chatId)
-        .maybeSingle();
-
-      if (chatError || !currentChat || currentChat.tags.length === 0) {
-        setRelatedChats([]);
-        return;
-      }
-
-      // Find chats that share at least one tag with the current chat
-      const { data: related, error: relatedError } = await supabase
-        .from('chats')
-        .select('*')
-        .neq('id', chatId)
-        .order('created_at', { ascending: false })
-        .limit(50); // Get more to filter by tags
-
-      if (relatedError) throw relatedError;
-
-      if (related) {
-        // Filter chats that have overlapping tags and sort by number of matching tags
-        const chatsWithScore = related
-          .map(relatedChat => {
-            const matchingTags = relatedChat.tags.filter(tag =>
-              currentChat.tags.includes(tag)
-            );
-            return {
-              chat: relatedChat,
-              score: matchingTags.length
-            };
-          })
-          .filter(item => item.score > 0)
-          .sort((a, b) => b.score - a.score)
-          .slice(0, 9)
-          .map(item => item.chat);
-
-        setRelatedChats(chatsWithScore);
-      }
-    } catch (error) {
-      console.error('Error fetching related chats:', error);
-      setRelatedChats([]);
-    }
-  }
 
   async function fetchChatAndMessages() {
     try {
@@ -402,63 +353,12 @@ export function ChatView({ chatId, onChatDeleted, onSelectTag, onSelectChat }: C
           </div>
         )}
 
-        {/* Related Chats Section */}
-        {relatedChats.length > 0 && (
-          <div className="border-t border-sand-200 dark:border-mocha-800 bg-sand-50 dark:bg-mocha-800/50 px-4 py-6 sm:px-6">
-            <div className="max-w-3xl mx-auto">
-              <h3 className="text-lg font-semibold text-mocha-900 dark:text-cream-50 mb-4 flex items-center gap-2">
-                <MessageSquare size={20} />
-                Related Chats
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {relatedChats.map((relatedChat) => (
-                  <button
-                    key={relatedChat.id}
-                    onClick={() => onSelectChat(relatedChat.id)}
-                    className="text-left p-3 bg-white dark:bg-mocha-700 border border-sand-200 dark:border-mocha-600 rounded-lg hover:border-lime-400 dark:hover:border-lime-500 hover:shadow-md transition-all group"
-                  >
-                    <h4 className="font-medium text-sm text-mocha-900 dark:text-cream-50 line-clamp-2 mb-2 group-hover:text-lime-600 dark:group-hover:text-lime-400">
-                      {relatedChat.title}
-                    </h4>
-                    <div className="flex items-center gap-2 text-xs text-mocha-600 dark:text-sand-300 mb-2">
-                      <span className="bg-sand-200 dark:bg-mocha-600 px-2 py-0.5 rounded">
-                        {relatedChat.ai_source}
-                      </span>
-                      <span>
-                        {new Date(relatedChat.created_at).toLocaleDateString()}
-                      </span>
-                    </div>
-                    {relatedChat.summary && (
-                      <div className="mb-2 p-2 bg-gradient-to-r from-cream-100 to-sand-100 dark:from-mocha-600 dark:to-mocha-700 border border-sand-200 dark:border-mocha-500 rounded">
-                        <div className="flex items-start gap-1.5">
-                          <Sparkles size={10} className="text-lime-600 dark:text-lime-400 mt-0.5 flex-shrink-0" />
-                          <p className="text-xs text-mocha-700 dark:text-sand-200 line-clamp-2">{relatedChat.summary}</p>
-                        </div>
-                      </div>
-                    )}
-                    {relatedChat.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {relatedChat.tags.slice(0, 3).map((tag) => (
-                          <span
-                            key={tag}
-                            className="text-xs bg-coral-100 dark:bg-coral-900/30 text-coral-700 dark:text-coral-300 px-2 py-0.5 rounded"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                        {relatedChat.tags.length > 3 && (
-                          <span className="text-xs text-mocha-500 dark:text-sand-400">
-                            +{relatedChat.tags.length - 3}
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* AI-Powered Related Chats Section */}
+        <div className="border-t border-sand-200 dark:border-mocha-800 bg-sand-50 dark:bg-mocha-800/50 px-4 py-6 sm:px-6">
+          <div className="max-w-3xl mx-auto">
+            <RelatedChats chatId={chatId} onSelectChat={onSelectChat} />
           </div>
-        )}
+        </div>
       </div>
 
       {showApiKeyModal && (

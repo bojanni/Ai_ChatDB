@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { BarChart3, MessageSquare, Calendar, Tag, TrendingUp, Sparkles } from 'lucide-react';
+import { BarChart3, MessageSquare, Calendar, Tag, TrendingUp, Sparkles, Network } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { Database } from '../lib/database.types';
+import NetworkVisualization from './NetworkVisualization';
 
 type Chat = Database['public']['Tables']['chats']['Row'];
 type Message = Database['public']['Tables']['messages']['Row'];
@@ -19,12 +20,14 @@ interface ChatStats {
 
 interface AnalyticsDashboardProps {
   onClose: () => void;
+  onSelectChat?: (chatId: string) => void;
 }
 
-export default function AnalyticsDashboard({ onClose }: AnalyticsDashboardProps) {
+export default function AnalyticsDashboard({ onClose, onSelectChat }: AnalyticsDashboardProps) {
   const [stats, setStats] = useState<ChatStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | 'all'>('30d');
+  const [showNetworkView, setShowNetworkView] = useState(false);
 
   useEffect(() => {
     loadAnalytics();
@@ -166,12 +169,21 @@ export default function AnalyticsDashboard({ onClose }: AnalyticsDashboardProps)
               <BarChart3 size={28} className="text-white" />
               <h2 className="text-2xl font-bold text-white">Analytics Dashboard</h2>
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-lg transition-colors text-white"
-            >
-              ✕
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowNetworkView(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors text-white font-medium"
+              >
+                <Network size={20} />
+                Network Map
+              </button>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white/20 rounded-lg transition-colors text-white"
+              >
+                ✕
+              </button>
+            </div>
           </div>
 
           <div className="flex gap-2 mt-4">
@@ -344,6 +356,20 @@ export default function AnalyticsDashboard({ onClose }: AnalyticsDashboardProps)
           </div>
         </div>
       </div>
+
+      {showNetworkView && (
+        <NetworkVisualization
+          onClose={() => setShowNetworkView(false)}
+          onSelectChat={(chatId) => {
+            setShowNetworkView(false);
+            onClose();
+            if (onSelectChat) {
+              onSelectChat(chatId);
+            }
+          }}
+          selectedChatId={null}
+        />
+      )}
     </div>
   );
 }
