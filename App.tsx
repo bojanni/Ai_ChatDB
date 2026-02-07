@@ -52,66 +52,96 @@ const generateMockEmbedding = (seed: string) => {
   for (let i = 0; i < seed.length; i++) {
     hash = seed.charCodeAt(i) + ((hash << 5) - hash);
   }
-  for (let i = 0; i < 16; i++) {
-    const val = Math.sin(hash + i) * 0.5 + 0.5;
+  for (let i = 0; i < 32; i++) {
+    const val = Math.sin(hash + i * 2.71);
     embedding.push(val);
   }
-  return embedding;
+  const mag = Math.sqrt(embedding.reduce((acc, v) => acc + v * v, 0));
+  return embedding.map(v => v / mag);
 };
+
+const MOCK_IMAGES = [
+  'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjYThhYjg4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IndoaXRlIiBmb250LXNpemU9IjIwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U3lzdGVtIEFyY2hpdGVjdHVyZTwvdGV4dD48L3N2Zz4=',
+  'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGJhYTg5Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IndoaXRlIiBmb250LXNpemU9IjIwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Q29uY2VwdHVhbCBNYXA8L3RleHQ+PC9zdmc+',
+  'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMmMyYTI1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZpbGw9IndoaXRlIiBmb250LXNpemU9IjIwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RGF0YSBWaXN1YWxpemF0aW9uPC90ZXh0Pjwvc3ZnPg=='
+];
 
 const generateDemoData = () => {
   const subjects = [
-    { name: 'Coding', tags: ['code', 'engineering', 'tech'], content: 'A deep dive into system design and clean code practices.' },
-    { name: 'Philosophy', tags: ['ideas', 'wisdom', 'stoicism'], content: 'Exploring the nature of consciousness and ethical frameworks.' },
-    { name: 'Creative', tags: ['writing', 'story', 'art'], content: 'Developing character motivations and non-linear narratives.' },
-    { name: 'Science', tags: ['physics', 'space', 'discovery'], content: 'Understanding quantum mechanics and the expansion of the universe.' },
-    { name: 'Productivity', tags: ['focus', 'habits', 'growth'], content: 'Optimizing workflow through deep work and time blocking.' },
-    { name: 'History', tags: ['past', 'events', 'culture'], content: 'Analyzing the societal shifts during the industrial revolution.' },
-    { name: 'AI Research', tags: ['llm', 'intelligence', 'future'], content: 'The evolution of transformer architectures and reasoning capabilities.' }
+    { name: 'Quantum Computing', tags: ['physics', 'tech', 'qubits'], content: 'Discussing error correction codes and topological qubits.' },
+    { name: 'Stoicism', tags: ['philosophy', 'mindset', 'ethics'], content: 'How to apply the dichotomy of control in a modern work environment.' },
+    { name: 'UI/UX Design', tags: ['design', 'frontend', 'product'], content: 'Optimizing accessibility patterns for complex data dashboards.' },
+    { name: 'Cybersecurity', tags: ['security', 'networks', 'encryption'], content: 'Zero-trust architecture implementation for remote teams.' },
+    { name: 'Neuroscience', tags: ['biology', 'brain', 'intelligence'], content: 'The relationship between dopamine receptors and habit formation.' },
+    { name: 'Culinary Science', tags: ['cooking', 'chemistry', 'gastronomy'], content: 'Maillard reaction optimization for plant-based proteins.' },
+    { name: 'Space Exploration', tags: ['nasa', 'mars', 'propulsion'], content: 'Analyzing the viability of nuclear thermal propulsion for long-duration missions.' },
+    { name: 'Distributed Systems', tags: ['backend', 'scalability', 'cloud'], content: 'CAP theorem trade-offs in globally distributed databases.' },
+    { name: 'Economics', tags: ['finance', 'markets', 'trends'], content: 'Inflationary pressure analysis in emerging digital economies.' },
+    { name: 'Sustainable Architecture', tags: ['ecology', 'building', 'urban'], content: 'Integrating passive cooling systems into high-density residential towers.' }
   ];
 
   const sources = [SourceType.CHATGPT, SourceType.CLAUDE, SourceType.GEMINI, SourceType.QWEN, SourceType.LOCAL];
   const demoItems: ChatEntry[] = [];
+  const demoLinks: Link[] = [];
 
-  for (let i = 0; i < 150; i++) {
+  // Generate 1367 Chats
+  for (let i = 0; i < 1367; i++) {
     const sub = subjects[Math.floor(Math.random() * subjects.length)];
     const src = sources[Math.floor(Math.random() * sources.length)];
-    const length = 500 + Math.floor(Math.random() * 5000);
-    const randomWords = ['intelligence', 'architecture', 'strategy', 'dynamic', 'paradigm', 'optimization', 'framework'];
-    const title = `${sub.name}: ${randomWords[Math.floor(Math.random() * randomWords.length)]} Discussion ${i + 1}`;
+    const hasImage = Math.random() < 0.15; // 15% have images
     
     demoItems.push({
       id: `demo-chat-${i}`,
       type: ItemType.CHAT,
-      title,
-      content: `User: Tell me about ${sub.name.toLowerCase()} trends.\n\nAssistant: ${sub.content} `.repeat(length / 200),
-      summary: `A comprehensive session regarding ${sub.name.toLowerCase()} methodologies and future outlooks.`,
-      tags: [...sub.tags, 'demo', src.toLowerCase().replace(/\s+/g, '-')],
+      title: `${sub.name} Investigation #${i + 1}`,
+      content: `User: Deep dive into ${sub.name.toLowerCase()} nuances.\n\nAssistant: ${sub.content} Additional research indicates that ${sub.tags[0]} is a critical vector for growth.`,
+      summary: `A technical session focused on the core components of ${sub.name.toLowerCase()}.`,
+      tags: [...sub.tags, 'archived'],
       source: src,
-      createdAt: Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 365),
+      createdAt: Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 730), // Past 2 years
       updatedAt: Date.now(),
-      embedding: generateMockEmbedding(sub.name + title)
+      embedding: generateMockEmbedding(sub.name),
+      assets: hasImage ? [MOCK_IMAGES[Math.floor(Math.random() * MOCK_IMAGES.length)]] : []
     });
   }
 
-  for (let i = 0; i < 25; i++) {
+  // Generate 377 Notes
+  for (let i = 0; i < 377; i++) {
     const sub = subjects[Math.floor(Math.random() * subjects.length)];
-    const title = `Synthesis: ${sub.name} Insights #${i + 1}`;
+    const noteId = `demo-note-${i}`;
+    
     demoItems.push({
-      id: `demo-note-${i}`,
+      id: noteId,
       type: ItemType.NOTE,
-      title,
-      content: `# My thoughts on ${sub.name}\n\n${sub.content} This is a personal reflection on the key takeaways from my recent AI interactions. I need to focus more on the ${sub.tags[0]} aspects.`,
-      summary: `A personal synthesis of ${sub.name} related concepts for future reference.`,
-      tags: [sub.tags[0], 'synthesis', 'personal'],
+      title: `Synthesis: ${sub.name} Theory`,
+      content: `# My findings on ${sub.name}\n\n## Conclusion\n${sub.content}\n\nThis synthesis pulls from several recent AI sessions.`,
+      summary: `Consolidated thoughts on ${sub.name.toLowerCase()} integration.`,
+      tags: [sub.tags[0], 'synthesis'],
       source: SourceType.MANUAL,
-      createdAt: Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 30),
+      createdAt: Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 180), // Past 6 months
       updatedAt: Date.now(),
-      embedding: generateMockEmbedding('synthesis' + sub.name + title)
+      embedding: generateMockEmbedding(sub.name)
     });
+
+    // Create 1-3 links per note to random chats of the same subject
+    const sameSubjectChats = demoItems.filter(item => 
+      item.type === ItemType.CHAT && 
+      item.title.startsWith(sub.name)
+    );
+    
+    const linkCount = Math.floor(Math.random() * 3) + 1;
+    for (let j = 0; j < Math.min(linkCount, sameSubjectChats.length); j++) {
+      const targetChat = sameSubjectChats[Math.floor(Math.random() * sameSubjectChats.length)];
+      demoLinks.push({
+        fromId: noteId,
+        toId: targetChat.id,
+        type: 'references',
+        createdAt: Date.now()
+      });
+    }
   }
 
-  return demoItems;
+  return { demoItems, demoLinks };
 };
 
 const App: React.FC = () => {
@@ -147,10 +177,8 @@ const App: React.FC = () => {
       let initialSettings = DEFAULT_SETTINGS;
 
       if (window.electronAPI) {
-        const nativeChats = await window.electronAPI.loadDatabase();
-        if (nativeChats) initialChats = nativeChats;
-        const nativeLinks = await window.electronAPI.loadLinks();
-        if (nativeLinks) initialLinks = nativeLinks;
+        initialChats = await window.electronAPI.loadDatabase() || [];
+        initialLinks = await window.electronAPI.loadLinks() || [];
         const savedSettings = localStorage.getItem(SETTINGS_KEY);
         if (savedSettings) initialSettings = JSON.parse(savedSettings);
       } else {
@@ -162,18 +190,18 @@ const App: React.FC = () => {
         if (savedSettings) initialSettings = JSON.parse(savedSettings);
       }
 
-      const demoData = generateDemoData();
-      const existingIds = new Set(initialChats.map(c => c.id));
-      const newDemoItems = demoData.filter(d => !existingIds.has(d.id));
-      
-      const combinedChats = [...newDemoItems, ...initialChats].map((c: any) => ({ 
-        ...c, 
-        type: c.type || ItemType.CHAT 
-      }));
+      // Generate enhanced demo data if archive is small
+      if (initialChats.length < 50) {
+        const { demoItems, demoLinks } = generateDemoData();
+        const existingIds = new Set(initialChats.map(c => c.id));
+        const newDemoItems = demoItems.filter(d => !existingIds.has(d.id));
+        initialChats = [...newDemoItems, ...initialChats];
+        initialLinks = [...demoLinks, ...initialLinks];
+      }
 
       setState(prev => ({
         ...prev,
-        chats: combinedChats,
+        chats: initialChats,
         links: initialLinks,
         settings: initialSettings
       }));
@@ -218,10 +246,10 @@ const App: React.FC = () => {
   }, [state.settings]);
 
   const handleAddLink = async (fromId: string, toId: string, type?: string) => {
+    const newLink: Link = { fromId, toId, type: type || 'related', createdAt: Date.now() };
     if (window.electronAPI) {
-      await window.electronAPI.addLink(fromId, toId, type);
+      await window.electronAPI.addLink(fromId, toId, newLink.type);
     }
-    const newLink: Link = { fromId, toId, type, createdAt: Date.now() };
     setState(prev => ({ ...prev, links: [...prev.links, newLink] }));
   };
 
@@ -238,14 +266,14 @@ const App: React.FC = () => {
     }));
   };
 
-  const handleUpload = (content: string, source: string, title: string, summary: string, tags: string[], fileName: string, embedding?: number[]) => {
+  const handleUpload = (content: string, source: string, title: string, summary: string, tags: string[], fileName: string, embedding?: number[], assets?: string[]) => {
     const newChat: ChatEntry = {
       id: Math.random().toString(36).substr(2, 9),
       type: ItemType.CHAT,
       title, content, summary, tags, source, 
       createdAt: Date.now(), 
       updatedAt: Date.now(),
-      fileName, embedding 
+      fileName, embedding, assets
     };
     setState(prev => ({ ...prev, chats: [newChat, ...prev.chats], isUploading: false, viewingChat: newChat, viewMode: 'archive' }));
   };
@@ -260,7 +288,8 @@ const App: React.FC = () => {
       tags: ['synthesis'],
       source: SourceType.MANUAL,
       createdAt: Date.now(),
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
+      embedding: generateMockEmbedding('synthesis')
     };
     setState(prev => ({ 
       ...prev, 
@@ -272,10 +301,11 @@ const App: React.FC = () => {
   };
 
   const handleAddDemo = () => {
-    const demoData = generateDemoData();
+    const { demoItems, demoLinks } = generateDemoData();
     setState(prev => ({ 
       ...prev, 
-      chats: [...demoData, ...prev.chats],
+      chats: [...demoItems, ...prev.chats],
+      links: [...demoLinks, ...prev.links],
       viewMode: 'dashboard'
     }));
   };
@@ -318,9 +348,13 @@ const App: React.FC = () => {
         const matchesSearch = searchStr === '' || chat.title.toLowerCase().includes(searchStr) || chat.summary.toLowerCase().includes(searchStr) || chat.content.toLowerCase().includes(searchStr);
         const matchesTags = state.selectedTags.length === 0 || state.selectedTags.every(tag => chat.tags.includes(tag));
         const matchesType = state.selectedType === 'all' || chat.type === state.selectedType;
-        return matchesSearch && matchesTags && matchesType;
+        const matchesSource = state.selectedSource === 'All' || chat.source === state.selectedSource;
+        const matchesDateStart = !state.searchFilters.dateStart || chat.createdAt >= new Date(state.searchFilters.dateStart).getTime();
+        const matchesDateEnd = !state.searchFilters.dateEnd || chat.createdAt <= new Date(state.searchFilters.dateEnd).getTime() + 86400000;
+
+        return matchesSearch && matchesTags && matchesType && matchesSource && matchesDateStart && matchesDateEnd;
     });
-  }, [state.chats, state.searchQuery, state.selectedTags, state.selectedType]);
+  }, [state.chats, state.searchQuery, state.selectedTags, state.selectedType, state.selectedSource, state.searchFilters.dateStart, state.searchFilters.dateEnd]);
 
   const relatedChats = useMemo(() => {
       const tags = state.relatedTags || [];
@@ -426,6 +460,11 @@ const App: React.FC = () => {
               setSearchQuery={(q) => setState(prev => ({ ...prev, searchQuery: q }))}
               selectedType={state.selectedType}
               onTypeChange={(t) => setState(prev => ({ ...prev, selectedType: t }))}
+              selectedSource={state.selectedSource}
+              onSourceChange={(s) => setState(prev => ({ ...prev, selectedSource: s }))}
+              dateStart={state.searchFilters.dateStart}
+              dateEnd={state.searchFilters.dateEnd}
+              onDateRangeChange={(start, end) => setState(prev => ({ ...prev, searchFilters: { ...prev.searchFilters, dateStart: start, dateEnd: end } }))}
               activeRelatedTags={state.relatedTags}
             />
 
